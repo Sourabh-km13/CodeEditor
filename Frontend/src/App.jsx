@@ -1,10 +1,21 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+import usePing from './hooks/apis/queries/usePing'
 
+
+function App() {
+  const {isPending,data} = usePing();
+
+  
+  if(isPending){
+    return(
+      <div>
+        loading ...
+      </div>
+    )
+  }
   return (
     <>
      <div>hello</div>
