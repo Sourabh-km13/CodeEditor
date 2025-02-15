@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
-
-import './App.css'
+import './app.css'
 
 import usePing from './hooks/apis/queries/usePing'
+
+import Router from './routes/Router';
+
 
 
 function App() {
@@ -17,9 +19,7 @@ function App() {
     )
   }
   return (
-    <>
-     <div>hello</div>
-    </>
+    <Router />
   )
 }
 
