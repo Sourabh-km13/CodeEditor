@@ -4,5 +4,5 @@ import { createprojectcontroller, getProjectTreeController } from '../../control
 
 const router = express.Router()
 router.post('/',createprojectcontroller)
-router.get('/:projectid',getProjectTreeController)
+router.get('/:projectid/tree',getProjectTreeController)
 export default router

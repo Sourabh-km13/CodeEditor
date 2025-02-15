@@ -2,6 +2,7 @@ import express, { urlencoded } from 'express'
 import { PORT } from './config/serverconfig.js'
 import cors from 'cors'
 import apiroute from './router/index.js'
+
 console.log(PORT,'port');
 
 const app = express();
@@ -13,7 +14,7 @@ app.use('/api', apiroute);
 app.get('/ping',(req,res)=>{
     return res.json({message:'pong'})
 })
-app.listen(PORT ,()=>{
+app.listen(3000 ,()=>{
     console.log(`server is runing on port:${PORT}`);
     
 })
