@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import FileIcon from '../../atoms/fileicon/FileIcon';
+import { useEditorSocketStore } from '../../../store/editorSocketStore';
 export default function Tree({ fileFolderData }) {
+
+    const { editorSocket } = useEditorSocketStore()
     const [visibility, setVisibility] = useState({})
     function toggleVisibility(name) {
         console.log(name);
@@ -11,11 +14,20 @@ export default function Tree({ fileFolderData }) {
             [name]: !visibility[name]
         })
     }
-    function computeExtension(fileFolderData){
+    function computeExtension(fileFolderData) {
         const names = fileFolderData.name.split('.')
-        return names[names.length-1]
+        return names[names.length - 1]
 
     }
+
+    function handleDoubleClick(fileData) {
+        console.log('double Clicked' , fileData.path);
+        
+        editorSocket.emit('readFile',{
+            filePath: fileData.path
+        })
+    }
+
     return (
         (fileFolderData && <div
             style={{
@@ -42,11 +54,13 @@ export default function Tree({ fileFolderData }) {
                     {fileFolderData.name}
                 </button>
             ) : (
-                <div style={{
-                    display:'flex',
-                    alignItems:'center'
-                }}>
-                    <FileIcon extension={computeExtension(fileFolderData)}/>
+                <div
+                    onDoubleClick={() => handleDoubleClick(fileFolderData)}
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center'
+                    }}>
+                    <FileIcon extension={computeExtension(fileFolderData)} />
                     <p
                         style={{
                             fontSize: '15px',
