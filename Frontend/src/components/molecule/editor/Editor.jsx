@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
 import Editor from '@monaco-editor/react'
 import { useEffect } from 'react'
-import { useEditorSocketStore } from '../../../store/editorSocketStore'
+
 import { userActiveTabStore } from '../../../store/activeFileTabStore';
+import { useEditorSocketStore } from './../../../store/editorSocketStore';
 export default function CodeEditor() {
 
-    const {editorSocket} = useEditorSocketStore()
-    const {activeFileTab ,setActiveFileTab}  = userActiveTabStore()
 
+    const {activeFileTab}  = userActiveTabStore()
+    const {editorSocket} = useEditorSocketStore()
     const[editorState,setEditorState]=useState({theme:null})
+    
     async function downloadTheme(){
       const response = await fetch('/Dracula.json')
       const data = await response.json();
@@ -16,11 +18,28 @@ export default function CodeEditor() {
       
     }
 
-    editorSocket&&editorSocket.on('readFileSuccess',(data)=>{
-      console.log('read file success', data);
-      setActiveFileTab(data.path , data.value ,undefined)
-    })
+    let timerId = null
 
+    function handleChange(value){
+      if(timerId!=null){
+        clearTimeout(timerId)
+      }
+      timerId=setTimeout(() => {
+        const editorContent = value;
+        editorSocket.emit("writeFile",{
+          data:editorContent,
+          filePath:activeFileTab.path
+        })
+      }, 2000);
+
+    }
+    // function handleChange (value){
+    //   const editorContent = value;
+    //     editorSocket.emit("writeFile",{
+    //       data:editorContent,
+    //       filePath:activeFileTab.path
+    //     })
+    // }
     useEffect(()=>{
         downloadTheme();
     },[])
@@ -43,6 +62,7 @@ export default function CodeEditor() {
         }}
         onMount={handleEditorTheme}
         value={activeFileTab?.value}
+        onChange={handleChange}
       />
       }
     </>    
