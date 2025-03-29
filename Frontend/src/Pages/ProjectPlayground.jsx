@@ -6,6 +6,8 @@ import TreeStructure from '../components/organism/treeStructure/TreeStructure'
 import { useTreeStructureStore } from '../store/treeStructureStore'
 import { useEditorSocketStore } from '../store/editorSocketStore'
 import io from 'socket.io-client'
+import BrowserTerminal from '../components/molecule/BrowserTerminal/BrowserTerminal'
+
 export default function Project() {
   const { projectid: projectidfromurl } = useParams()
   const { setEditorSocket } = useEditorSocketStore();
@@ -47,6 +49,9 @@ export default function Project() {
 
       <EditorButton isActive={true} />
       <EditorButton isActive={false} />
+      <div>
+        <BrowserTerminal/>
+      </div>
     </>
 
   )
