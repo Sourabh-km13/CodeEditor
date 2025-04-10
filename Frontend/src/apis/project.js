@@ -11,9 +11,9 @@ export const createProject = async (res,req) => {
         
     }
 }
-export const getProjectTree = async ({projectid})=>{
+export const getProjectTree = async ({projectId})=>{
     try {
-        const response = await axios.get(`/api/v1/projects/${projectid}/tree`)
+        const response = await axios.get(`/api/v1/projects/${projectId}/tree`)
         console.log(response.data);
         return response.data
         

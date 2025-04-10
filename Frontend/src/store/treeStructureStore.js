@@ -6,24 +6,24 @@ import { getProjectTree } from '../apis/project';
 export const useTreeStructureStore = create((set,get)=>{
     const queryClient = new QueryClient();
     return{
-        ProjectId:null,
+        projectId:null,
         treeStructure:null,
         
         setTreeStructure:async ()=>{
-            const id = get().ProjectId;
+            const id = get().projectId;
             const data= await queryClient.fetchQuery({
                 queryKey:['TreeStore'],
-                queryFn:()=>getProjectTree({projectid:id})
+                queryFn:()=>getProjectTree({projectId:id})
             })
 
             set({
                 treeStructure : data,
             })
         },
-        setProjectId:(projectid)=>{
+        setprojectId:(projectId)=>{
             
             set({
-                ProjectId:projectid,
+                projectId:projectId,
             })
         }
     }

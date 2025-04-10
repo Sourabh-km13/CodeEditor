@@ -7,7 +7,7 @@ import FileContextMenu from "../../molecule/ContextMenu/FileContextMenu";
 
 
 export default function TreeStructure() {
-    const {treeStructure,setTreeStructure,ProjectID}=useTreeStructureStore()    
+    const {treeStructure,setTreeStructure,projectId}=useTreeStructureStore()    
     const{
           file,
           isOpen:isFileContextOpen ,
@@ -21,7 +21,7 @@ export default function TreeStructure() {
         
       }
       else{
-        setTreeStructure(ProjectID)
+        setTreeStructure(projectId)
       }
     },[setTreeStructure ,treeStructure])
   return (

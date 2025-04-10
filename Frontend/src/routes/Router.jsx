@@ -9,7 +9,7 @@ export default function Router() {
   return (
     <Routes>
       <Route path="/" element={<CreateProject />} />
-      <Route path="/project/:projectid" element={<ProjectPlayground />} />
+      <Route path="/project/:projectId" element={<ProjectPlayground />} />
 
     </Routes>
   )

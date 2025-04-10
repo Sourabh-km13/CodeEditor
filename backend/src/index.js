@@ -5,9 +5,12 @@ import apiroute from "./router/index.js"
 import { Server } from "socket.io"
 import { createServer } from "node:http"
 import chokidar from "chokidar"
-import path from "path"
 import { handleEditorSocketEvents } from "./socketHandlers/editorHandler.js"
-import { handleContainerCreate } from "./Containers/handleContainer.js"
+import { WebSocketServer , WebSocket,} from "ws";
+
+import handleTerminalCreation from "./Containers/handleTerminalCreation.js"
+import { handleContainerCreate, listContainer } from "./Containers/handleContainer.js"
+import { setTimeout } from "node:timers"
 
 console.log(PORT, "port")
 
@@ -50,23 +53,54 @@ editorNameSpace.on("connection", (socket) => {
         })
     }
     handleEditorSocketEvents(socket, editorNameSpace)
+    socket.on('getPort',()=>{
+        console.log('port received');
+        listContainer()
+        
+    })
 })
 
-const terminalNamespace = io.of('/terminal')
-terminalNamespace.on('connection',(socket)=>{
-    const projectId = socket.handshake.query.projectId
-    console.log('terminal connected');
-    socket.on('disconnect',()=>{
-        console.log('terminal disconnected');
-    })
-    socket.on('shell-input',(data)=>{
-        socket.emit('shell-output',data)
-    })
-    handleContainerCreate(socket , projectId)
-})
+
 
 server.listen(3000, () => {
     console.log(`server is running on port:${PORT}`)
-    console.log(process.cwd());
+    
     
 })
+
+const webSocketForTerminal = new WebSocketServer({
+    noServer:true,
+
+})  
+server.on('upgrade',(req, tcpSocket ,head)=>{
+    
+    const isTerminal = req.url.includes('/terminal')
+    if (isTerminal) {
+        console.log("✅ WebSocket upgrade for terminal");
+        const projectId = new URLSearchParams(req.url.split("?")[1]).get("projectId");
+        console.log(projectId,'inside upgrade requesr');
+        
+            handleContainerCreate(projectId,webSocketForTerminal,req,tcpSocket,head)
+        }
+    else{
+        
+        console.log('unwanted req');
+        
+    }
+    
+})
+webSocketForTerminal.on('connection',(ws ,req ,container)=>{
+    console.log('terminal connected');
+    handleTerminalCreation(container,ws)
+    ws.on('close',()=>{
+        container.remove({force :true},(err , data)=>{
+            if(err){
+                console.log('error while removing container',err); 
+            }
+            
+                console.log('container removed');
+                
+        })
+    })
+})
+
