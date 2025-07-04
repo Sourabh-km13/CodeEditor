@@ -4,6 +4,7 @@ An interactive, full-stack online playground to write, run, and manage React app
 
 ---
 
+
 ## 🚀 Features
 
 - 🧠 **Create React Playground** — Instantly spin up a new React project using `npm create vite@latest`
@@ -23,6 +24,8 @@ An interactive, full-stack online playground to write, run, and manage React app
 - **Editor**: Monaco Editor with real-time editing support
 
 ---
+<img width="722" alt="17516149261581418182555729330533" src="https://github.com/user-attachments/assets/17b3504e-6a6a-4774-90e2-9418e358a7f8" />
+
 
 ## 🔍 How It Works
 
